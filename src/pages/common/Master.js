@@ -33,6 +33,7 @@ const useStyles = makeStyles(theme => ({
         overflow: 'auto',
     },
     container: {
+        marginTop: theme.spacing(7),
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4),
     },
@@ -54,7 +55,7 @@ const useStyles = makeStyles(theme => ({
         },
     },
     appBar: {
-        borderBottom: '#F7F7F7'
+        borderBottom: '1px solid #C01820'
     },
     buttonFroup :{
         paddingLeft: "20px"
@@ -90,7 +91,7 @@ function MasterLayout(props) {
                     <AppBar className={classes.appBar}>
                         <Toolbar>
                             {/* Tech in Asia Logo */}
-                            <Card className={classes.cardRoot} elevation="0">
+                            <Card className={classes.cardRoot} elevation={0}>
                                 <CardMedia
                                     image={tiaLogo}
                                     component="img"
