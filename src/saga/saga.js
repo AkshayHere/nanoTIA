@@ -7,6 +7,7 @@ import {
 	HIDE_LOADER,
 	SAVE_POSTS,
 	SET_PAGE_NO,
+	SAVE_POST_DETAILS,
 } from 'redux/constants';
 
 import requests from './requests';
@@ -37,23 +38,23 @@ export function* getPosts() {
 }
 
 export function* getPostDetails() {
-	yield takeLatest(GET_POST_DETAILS, function* fetchRecords() {
-		let posts = [];
-		let pageNo = '';
+	yield takeLatest(GET_POST_DETAILS, function* fetchRecords(payload) {
+		let currentPost = {};
+
+		let { slug } = payload.payload;
+		console.log('slug',slug);
 
 		try {
 			window.store.dispatch({ type: SHOW_LOADER, payload: {} });
-			const response = yield call(requests.getPostDetails);
-			posts = response.data.posts;
-			pageNo = response.data.current_page;
+
+			const response = yield call(requests.getPostDetails, slug);
+			currentPost = response.data.posts.shift();
 
 			window.store.dispatch({ type: HIDE_LOADER, payload: {} });
 
 			// save posts
-			yield put({ type: SAVE_POSTS, payload: posts });
+			yield put({ type: SAVE_POST_DETAILS, payload: currentPost });
 
-			// save posts
-			yield put({ type: SET_PAGE_NO, payload: pageNo });
 		} catch (error) {
 			console.warn('error : ', error);
 			return;
@@ -63,7 +64,8 @@ export function* getPostDetails() {
 
 export default function* rootSaga() {
 	const sagas = [
-		getPosts
+		getPosts,
+		getPostDetails,
 	];
 
 	yield all(

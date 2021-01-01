@@ -1,12 +1,8 @@
-import { Grid, makeStyles } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { push } from 'connected-react-router';
-import Loader from 'pages/common/Loader';
 import Master from 'pages/common/Master';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-// import './App.css';
-
-import AllPosts from './components/AllPosts';
 
 const useStyles = makeStyles(theme => (
   {
@@ -33,28 +29,22 @@ function Component(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    document.title = `Tech in Asia`;
+    
   }, []);
 
   return (
     <Master>
       <div className={classes.root}>
-        {
-          props.loading && <Loader />
-        }
-        {
-          !props.loading &&
           <Grid container className={classes.gridWrapper} spacing={4} direction="row" justify="center"
             alignItems="center">
             <Grid item xs={12}>
-              <AllPosts />
+            <Typography variant="h5" component="h5"></Typography>
             </Grid>
           </Grid>
-        }
       </div>
     </Master>
   );
 }
 
-const App = connect(mapStateToProps, mapDispatchToProps)(Component);
-export default App;
+const ErrorPage = connect(mapStateToProps, mapDispatchToProps)(Component);
+export default ErrorPage;

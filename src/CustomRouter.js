@@ -52,6 +52,14 @@ const Post = (lazy(() => (
   import(/* webpackChunkName: "Post" */ 'pages/post/App')
 )));
 
+const ErrorPage = (lazy(() => (
+  import(/* webpackChunkName: "ErrorPage" */ 'pages/common/ErrorPage')
+)));
+
+const Debug = (lazy(() => (
+  import(/* webpackChunkName: "ErrorPage" */ 'pages/debug')
+)));
+
 export default function CustomRouter() {
   return (
     <Provider store={store}>
@@ -59,7 +67,9 @@ export default function CustomRouter() {
         <Suspense fallback={<div />}>
           <Switch>
             <Route exact path="/" component={Dashboard} />
-            <Route exact path="/post" component={Post} />
+            <Route exact path="/debug" component={Debug} />
+            <Route exact path="/post/:slug" component={Post} />
+            <Route exact path="/error" component={ErrorPage} />
           </Switch>
         </Suspense>
       </ConnectedRouter>

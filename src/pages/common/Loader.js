@@ -32,7 +32,7 @@ class Loader extends React.Component {
                     justify="center"
                     alignItems="center">
                     <Grid item >
-                        <CircularProgress thickness={7}  />
+                        <CircularProgress color="secondary" thickness={7}  />
                     </Grid>
                 </Grid>
 

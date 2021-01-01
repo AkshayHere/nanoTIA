@@ -1,10 +1,13 @@
-.App {
-  text-align: center;
+#summary {
+	border: 5px solid #dbdbdb;
+	position: relative;
+	background: #ffffff;
+	padding: 25px;
+	margin-bottom: 30px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* .App {
+  text-align: center;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -35,4 +38,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */

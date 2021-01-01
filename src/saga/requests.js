@@ -27,7 +27,7 @@ const requests = {
    * @param {*} slug 
    */
   getPostDetails(slug) {
-    let url = process.env.REACT_APP_TIA_URL + "posts" +slug;
+    let url = process.env.REACT_APP_TIA_URL + "posts/" +slug;
     return axios.get(url, {
     })
       .then(response => {

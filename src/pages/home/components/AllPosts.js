@@ -32,14 +32,8 @@ function Component(props) {
     useEffect(() => {
         document.title = `Tech in Asia - Home`;
         let payload = {};
-        props.getPosts(payload);
-        
-        window.addEventListener('scroll', handleScroll);
+        props.getPosts(payload); 
     }, []);
-
-    const handleScroll = (event) => {
-        console.log('event', event);
-    }
 
     return (
         <React.Fragment>
@@ -48,7 +42,7 @@ function Component(props) {
                     props.posts && props.posts.length ?
                         props.posts.map((post, index) => {
                             return (
-                                <Grid item xs={12} sm={12} lg={10}>
+                                <Grid item xs={12} sm={12} lg={10} key={index}>
                                     <Post key={index} post={post} />
                                 </Grid>
 

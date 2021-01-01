@@ -28,6 +28,10 @@ export function reducer(state = initialState, action) {
             newState.api = assign({}, newState.api, action.payload);
             return newState;
         
+        case ACTIONS.SAVE_POST_DETAILS:
+            newState.currentPost = assign({}, newState.currentPost, action.payload);
+            return newState;
+        
             // save api data
         case ACTIONS.SAVE_POSTS:
             newState.posts = [...newState.posts, ...action.payload];

@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,8 +10,6 @@ import Container from '@material-ui/core/Container';
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { theme } from 'pages/common/theme';
 import { connect } from 'react-redux';
-
-// import Header from './Navigation';
 
 // company images
 const tiaLogo = process.env.PUBLIC_URL + "/tia-logo.png";
@@ -57,9 +54,14 @@ const useStyles = makeStyles(theme => ({
     appBar: {
         borderBottom: '1px solid #C01820'
     },
-    buttonFroup :{
+    buttonFroup: {
         paddingLeft: "20px"
-    }
+    },
+    footer: {
+        position: "fixed",
+        bottom: theme.spacing(2),
+        right: theme.spacing(2)
+      }
 }));
 
 function ElevationScroll(props) {
@@ -77,11 +79,14 @@ function ElevationScroll(props) {
 
 function MasterLayout(props) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
 
     React.useEffect(() => {
         document.title = `Tech in Asia`;
     }, []);
+
+    const redirectHome = (event) => {
+        window.location.href = '/';
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -91,14 +96,13 @@ function MasterLayout(props) {
                     <AppBar className={classes.appBar}>
                         <Toolbar>
                             {/* Tech in Asia Logo */}
-                            <Card className={classes.cardRoot} elevation={0}>
+                            <Card className={classes.cardRoot} elevation={0} onClick={redirectHome}>
                                 <CardMedia
                                     image={tiaLogo}
                                     component="img"
                                     title="TIA Logo"
                                 />
                             </Card>
-                            {/* <Header/> */}
                         </Toolbar>
                     </AppBar>
                 </ElevationScroll>
@@ -112,6 +116,5 @@ function MasterLayout(props) {
         </ThemeProvider>
     );
 }
-
 const Master = connect(mapStateToProps, null)(MasterLayout);
 export default Master;
