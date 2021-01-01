@@ -1,12 +1,12 @@
+// import logo from './logo.svg';
 import { Grid, makeStyles } from '@material-ui/core';
 import { push } from 'connected-react-router';
 import Loader from 'pages/common/Loader';
 import Master from 'pages/common/Master';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
-// import './App.css';
 
-import AllPosts from './components/AllPosts';
+import './App.css';
 
 const useStyles = makeStyles(theme => (
   {
@@ -30,10 +30,11 @@ const mapStateToProps = (state) => {
 }
 
 function Component(props) {
+
   const classes = useStyles();
 
   useEffect(() => {
-    document.title = `Tech in Asia`;
+    document.title = `Tech in Asia - Post`;
   }, []);
 
   return (
@@ -47,7 +48,7 @@ function Component(props) {
           <Grid container className={classes.gridWrapper} spacing={4} direction="row" justify="center"
             alignItems="center">
             <Grid item xs={12}>
-              <AllPosts />
+              Post Details
             </Grid>
           </Grid>
         }

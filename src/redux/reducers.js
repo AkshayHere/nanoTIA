@@ -4,7 +4,8 @@ import { cloneDeep, mergeWith, assign } from 'lodash';
 const initialState = {
     //api effects result / response
     //all request=>responses will be dump into this area
-    posts: {},
+    posts: [],
+    pageNo: '',
 
     currentPost: {},
 
@@ -29,21 +30,25 @@ export function reducer(state = initialState, action) {
         
             // save api data
         case ACTIONS.SAVE_POSTS:
-            newState.posts = { ...newState.posts, ...action.payload };
+            newState.posts = [...newState.posts, ...action.payload];
             return newState;
 
         // Loader
         case ACTIONS.SHOW_LOADER:
-            newState.uiEffects.pageLoader = true;
+            newState.pageLoader = true;
             return newState;
 
         case ACTIONS.HIDE_LOADER:
-            newState.uiEffects.pageLoader = false;
+            newState.pageLoader = false;
             return newState;
 
         // Set Field Values
         case ACTIONS.SET_FIELD_VALUES:
             newState.fields = { ...newState.fields, ...action.payload };
+            return newState;
+
+        case ACTIONS.SET_PAGE_NO:
+            newState.pageNo = action.payload;
             return newState;
 
         default:

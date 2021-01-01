@@ -5,7 +5,8 @@ import {
 	GET_POST_DETAILS,
 	SHOW_LOADER,
 	HIDE_LOADER,
-	SAVE_POSTS
+	SAVE_POSTS,
+	SET_PAGE_NO,
 } from 'redux/constants';
 
 import requests from './requests';
@@ -13,20 +14,50 @@ import requests from './requests';
 export function* getPosts() {
 	yield takeLatest(GET_POSTS, function* fetchRecords() {
 		let posts = [];
+		let pageNo = '';
 
 		try {
 			window.store.dispatch({ type: SHOW_LOADER, payload: {} });
 			const response = yield call(requests.getPosts);
 			posts = response.data.posts;
+			pageNo = response.data.current_page;
 
 			window.store.dispatch({ type: HIDE_LOADER, payload: {} });
 
+			// save posts
+			yield put({ type: SAVE_POSTS, payload: posts });
+
+			// save page no
+			yield put({ type: SET_PAGE_NO, payload: pageNo });
 		} catch (error) {
 			console.warn('error : ', error);
 			return;
 		}
+	});
+}
 
-		yield put({ type: SAVE_POSTS, payload: posts });
+export function* getPostDetails() {
+	yield takeLatest(GET_POST_DETAILS, function* fetchRecords() {
+		let posts = [];
+		let pageNo = '';
+
+		try {
+			window.store.dispatch({ type: SHOW_LOADER, payload: {} });
+			const response = yield call(requests.getPostDetails);
+			posts = response.data.posts;
+			pageNo = response.data.current_page;
+
+			window.store.dispatch({ type: HIDE_LOADER, payload: {} });
+
+			// save posts
+			yield put({ type: SAVE_POSTS, payload: posts });
+
+			// save posts
+			yield put({ type: SET_PAGE_NO, payload: pageNo });
+		} catch (error) {
+			console.warn('error : ', error);
+			return;
+		}
 	});
 }
 

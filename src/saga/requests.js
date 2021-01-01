@@ -20,7 +20,25 @@ const requests = {
       .catch(error => {
         console.log(error.response);
       });
+  },
+
+  /**
+   * Get Post Details by slug 
+   * @param {*} slug 
+   */
+  getPostDetails(slug) {
+    let url = process.env.REACT_APP_TIA_URL + "posts" +slug;
+    return axios.get(url, {
+    })
+      .then(response => {
+        console.log(response.data);
+        return response;
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
   }
+
 };
 
 export default requests;

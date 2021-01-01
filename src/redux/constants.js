@@ -15,3 +15,6 @@ export const SAVE_POST_DETAILS ="SAVE_POST_DETAILS";
 
 // fields
 export const SET_FIELD_VALUES = 'SET_FIELD_VALUES';
+
+// set page no
+export const SET_PAGE_NO = 'SET_PAGE_NO';

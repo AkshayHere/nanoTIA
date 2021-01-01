@@ -13,5 +13,5 @@ export const commonProcessors = store => next => action => {
       break;
   }
 
-  return next(action)
+  return next(action);
 }

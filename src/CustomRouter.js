@@ -48,8 +48,8 @@ const Dashboard = (lazy(() => (
   import(/* webpackChunkName: "Dashboard" */ 'pages/home/App')
 )));
 
-const Article = (lazy(() => (
-  import(/* webpackChunkName: "Article" */ 'pages/article/App')
+const Post = (lazy(() => (
+  import(/* webpackChunkName: "Post" */ 'pages/post/App')
 )));
 
 export default function CustomRouter() {
@@ -59,7 +59,7 @@ export default function CustomRouter() {
         <Suspense fallback={<div />}>
           <Switch>
             <Route exact path="/" component={Dashboard} />
-            <Route exact path="/post" component={Article} />
+            <Route exact path="/post" component={Post} />
           </Switch>
         </Suspense>
       </ConnectedRouter>
