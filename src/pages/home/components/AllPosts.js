@@ -33,7 +33,13 @@ function Component(props) {
         document.title = `Tech in Asia - Home`;
         let payload = {};
         props.getPosts(payload);
+        
+        window.addEventListener('scroll', handleScroll);
     }, []);
+
+    const handleScroll = (event) => {
+        console.log('event', event);
+    }
 
     return (
         <React.Fragment>
