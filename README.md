@@ -5,7 +5,18 @@
 Its a simple mini website which took motivation from [Tech in Asia](https://www.techinasia.com/) and build using various technologies like [ReactJS](https://reactjs.org/), [Redux](https://redux.js.org/), [Redux Saga](https://github.com/redux-saga/redux-saga), etc.
 
 ## Installation
-- Clone the repo in your local system
-- In your terminal, cd into the directory you just created
-- Do an ```npm install``` to pull the necessary packages to run the project
-- Once installation is completed, ```npm start``` to run the project in your local system. You will be redirected to [localhost](localhost:3000/).
+Clone the project in your desired folder
+
+    git clone https://github.com/AkshayHere/nanoTIA.git
+
+Switch to the folder
+
+    cd laravel-realworld-example-app
+
+Install the necessary packages
+
+    npm install
+
+Once installation is completed, run the project in your local system using the below command. You will be redirected to [localhost:3000/](localhost:3000/).
+
+    npm start
