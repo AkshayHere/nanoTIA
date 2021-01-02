@@ -8,6 +8,8 @@ import { Avatar, Grid, Link } from '@material-ui/core';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import Loader from 'pages/common/Loader';
+import { push } from 'connected-react-router';
+import moment from 'moment';
 
 const useStyles = makeStyles({
     root: {
@@ -29,7 +31,8 @@ export default function Post(props) {
 
     const handleClick = (event) => {
         let slug = props.post.slug;
-        window.location.href = '/post/' + slug;
+        // window.location.href = '/post/' + slug;
+        window.store.dispatch(push('/post/' + slug));
     };
 
     const [image, setImage] = useState("");
@@ -54,7 +57,7 @@ export default function Post(props) {
             <Card className={classes.root} elevation={1}>
                 <CardActionArea onClick={handleClick}>
                     <Grid container className={classes.root} spacing={2}>
-                        <Grid item xs={4}>
+                        <Grid item xs={12} sm={6} md={4} lg={4}>
                             {image ?
                                 <CardMedia
                                     className={classes.media}
@@ -63,7 +66,7 @@ export default function Post(props) {
                                     alt={props.post.title}
                                 /> : <Loader />}
                         </Grid>
-                        <Grid item xs={8}>
+                        <Grid item xs={12} sm={6} md={8} lg={8}>
                             <Grid container className={classes.gridText} spacing={2}>
                                 <Grid item xs={12}>
                                     <Typography variant="h5" component="h2">
@@ -75,14 +78,21 @@ export default function Post(props) {
                                         {props.post.excerpt}
                                     </Typography>
                                 </Grid>
-                                <Grid item xs={12} sm={2} md={1}>
-                                    <Avatar alt="Remy Sharp" src={props.post.author.avatar_url} />
-                                </Grid>
-                                <Grid item xs={12} sm={10} md={11}>
-                                    <Typography variant="caption" color="textSecondary" component="p" align="left">
-                                        {props.post.author.display_name}
-                                    </Typography>
-                                </Grid>
+                                {
+                                    'author' in props.post && props.post.author &&
+                                    <React.Fragment>
+                                        <Grid item xs={12} sm={2} md={1}>
+                                            <Avatar alt="Remy Sharp" src={props.post.author.avatar_url} />
+                                        </Grid>
+                                        <Grid item xs={12} sm={10} md={11}>
+                                            <Typography variant="caption" color="textSecondary" component="p" align="left">
+                                                {props.post.author.display_name}
+                                                &nbsp;&middot;&nbsp;{moment(props.post.author.date_gmt).format("DD MMM YYYY")}
+                                                &nbsp;&middot;&nbsp;{props.post.read_time} min read
+                                            </Typography>
+                                        </Grid>
+                                    </React.Fragment>
+                                }
                             </Grid>
                         </Grid>
                     </Grid>

@@ -33,24 +33,18 @@ function Component(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    document.title = `Tech in Asia`;
+    document.title = `Tech in Asia - Connecting Asia's startup ecosystem`;
   }, []);
 
   return (
     <Master>
       <div className={classes.root}>
-        {
-          props.loading && <Loader />
-        }
-        {
-          !props.loading &&
-          <Grid container className={classes.gridWrapper} spacing={4} direction="row" justify="center"
-            alignItems="center">
-            <Grid item xs={12}>
-              <AllPosts />
-            </Grid>
+        <Grid container className={classes.gridWrapper} spacing={4} direction="row" justify="center"
+          alignItems="center">
+          <Grid item xs={12}>
+            <AllPosts />
           </Grid>
-        }
+        </Grid>
       </div>
     </Master>
   );

@@ -1,4 +1,7 @@
 import axios from "axios";
+import {
+	API_ERROR_RESPONSE
+} from 'redux/constants';
 
 const requests = {
 
@@ -18,7 +21,10 @@ const requests = {
         return response;
       })
       .catch(error => {
-        console.log(error.response);
+        let errorData = error.response.data;
+        console.log('errorData',errorData);
+        window.store.dispatch({ type: API_ERROR_RESPONSE, payload: errorData });
+        throw error;
       });
   },
 
@@ -35,7 +41,10 @@ const requests = {
         return response;
       })
       .catch(error => {
-        console.log(error.response);
+        let errorData = error.response.data;
+        console.log('errorData',errorData);
+        window.store.dispatch({ type: API_ERROR_RESPONSE, payload: errorData });
+        throw error;
       });
   }
 

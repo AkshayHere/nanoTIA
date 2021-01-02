@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { useEffect } from 'react';
 
 import Post from './Post';
+import Loader from 'pages/common/Loader';
 
 const useStyles = makeStyles({
     root: {},
@@ -22,7 +23,8 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
     return {
-        posts: state.common && "posts" in state.common ? state.common.posts : null
+        posts: state.common && "posts" in state.common ? state.common.posts : null,
+        pageNo: state.common && "pageNo" in state.common ? state.common.pageNo : 1,
     };
 }
 
@@ -30,14 +32,44 @@ function Component(props) {
     const classes = useStyles();
 
     useEffect(() => {
-        document.title = `Tech in Asia - Home`;
         let payload = {};
-        props.getPosts(payload); 
+        props.getPosts(payload);
+    }, []);
+
+    // Get Scroll height
+    const [pos, setPos] = useState("top");
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        document.addEventListener("scroll", e => {
+            let totalBrowserHeight = document.body.offsetHeight;
+            let scrollHeight = window.scrollY;
+            let windowHeight = window.innerHeight;
+
+            if (((scrollHeight + windowHeight) + 5) >= totalBrowserHeight) {
+                console.log('reached end of page...');
+                let urlPath = window.location.pathname;
+                console.log('urlPath', urlPath);
+                if ('common' in window.store.getState() && 'pageNo' in window.store.getState().common) {
+                    if (urlPath === '/') {
+                        let nextPage = window.store.getState().common.pageNo + 1;
+                        console.log('nextPage', nextPage);
+                        let payload = {};
+                        payload['pageNo'] = nextPage;
+                        props.getPosts(payload);
+                        setLoading(true);
+                    }
+                }
+            } else {
+                setLoading(false);
+            }
+        })
     }, []);
 
     return (
         <React.Fragment>
-            <Grid container className={classes.root} spacing={2}>
+            <Grid container className={classes.root} spacing={2} direction="row" justify="center"
+          alignItems="center">
                 {
                     props.posts && props.posts.length ?
                         props.posts.map((post, index) => {
@@ -45,9 +77,14 @@ function Component(props) {
                                 <Grid item xs={12} sm={12} lg={10} key={index}>
                                     <Post key={index} post={post} />
                                 </Grid>
-
                             )
-                        }) : <div>Loading posts...</div>
+                        }) : <div><Loader /></div>
+                }
+                {
+                    loading &&
+                    <Grid item xs={12}>
+                        <Loader />
+                    </Grid>
                 }
             </Grid>
         </React.Fragment>

@@ -1,5 +1,5 @@
 import * as ACTIONS from "./constants";
-import { cloneDeep, mergeWith, assign } from 'lodash';
+import { cloneDeep, mergeWith, assign, merge, sortBy } from 'lodash';
 
 const initialState = {
     //api effects result / response
@@ -14,8 +14,8 @@ const initialState = {
         pageLoader: false
     },
 
-    // for fields across different pages
-    fields: {},
+    // for api errors
+    errors: {},
 };
 
 
@@ -27,14 +27,23 @@ export function reducer(state = initialState, action) {
         case ACTIONS.API_SAVE_RESPONSE:
             newState.api = assign({}, newState.api, action.payload);
             return newState;
-        
+
         case ACTIONS.SAVE_POST_DETAILS:
             newState.currentPost = assign({}, newState.currentPost, action.payload);
             return newState;
-        
-            // save api data
+
+        // save api data
         case ACTIONS.SAVE_POSTS:
-            newState.posts = [...newState.posts, ...action.payload];
+            // newState.posts = [...newState.posts, ...action.payload];
+            // let allPosts = [...newState.posts, ...action.payload];
+            // let sortedPost = sortBy(allPosts, ['modified_gmt']);
+            // newState.posts = sortedPost;
+            // newState.posts = merge(newState.posts,action.payload);
+
+            var slugs = new Set(newState.posts.map(d => d.slug));
+            var merged = [...newState.posts, ...action.payload.filter(d => !slugs.has(d.slug))];
+            newState.posts = merged;
+            console.log('newState.posts', newState.posts);
             return newState;
 
         // Loader
@@ -46,13 +55,14 @@ export function reducer(state = initialState, action) {
             newState.pageLoader = false;
             return newState;
 
-        // Set Field Values
-        case ACTIONS.SET_FIELD_VALUES:
-            newState.fields = { ...newState.fields, ...action.payload };
-            return newState;
-
+        // save page no
         case ACTIONS.SET_PAGE_NO:
             newState.pageNo = action.payload;
+            return newState;
+
+        // save error response
+        case ACTIONS.API_ERROR_RESPONSE:
+            newState.errors = action.payload;
             return newState;
 
         default:

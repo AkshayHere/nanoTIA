@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
-import { Card, CardMedia, useScrollTrigger } from '@material-ui/core';
+import { Card, CardMedia, useScrollTrigger, Zoom } from '@material-ui/core';
 
 import Container from '@material-ui/core/Container';
+import Fab from '@material-ui/core/Fab';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 import { makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { theme } from 'pages/common/theme';
 import { connect } from 'react-redux';
+import { createRef } from 'react';
 
 // company images
 const tiaLogo = process.env.PUBLIC_URL + "/tia-logo.png";
@@ -61,7 +64,7 @@ const useStyles = makeStyles(theme => ({
         position: "fixed",
         bottom: theme.spacing(2),
         right: theme.spacing(2)
-      }
+    }
 }));
 
 function ElevationScroll(props) {
@@ -73,15 +76,43 @@ function ElevationScroll(props) {
     });
 
     return React.cloneElement(children, {
-        elevation: trigger ? 4 : 0,
+        elevation: trigger ? 10 : 0,
     });
 }
 
-function MasterLayout(props) {
+const ScrollTop = React.forwardRef((props, ref) => {
+    const { children, window } = props;
     const classes = useStyles();
 
+    const trigger = useScrollTrigger({
+        target: window ? window() : undefined,
+        disableHysteresis: true,
+        threshold: 100,
+    });
+
+    const handleClick = (event) => {
+        const anchor = (event.target.ownerDocument || document).querySelector('#back-to-top-anchor');
+        if (anchor) {
+            anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
+    return (
+        <Zoom in={trigger} ref={ref}>
+            <div onClick={handleClick} role="presentation" className={classes.footer}>
+                {children}
+            </div>
+        </Zoom>
+    );
+});
+
+
+function MasterLayout(props) {
+    const classes = useStyles();
+    const ref = createRef();
+
     React.useEffect(() => {
-        document.title = `Tech in Asia`;
+        document.title = `Tech in Asia - Connecting Asia's startup ecosystem`;
     }, []);
 
     const redirectHome = (event) => {
@@ -106,12 +137,15 @@ function MasterLayout(props) {
                         </Toolbar>
                     </AppBar>
                 </ElevationScroll>
-                <main className={classes.content}>
-                    <div className={classes.appBarSpacer} />
-                    <Container {...props.container && props.container} maxWidth="xl" className={classes.container}>
-                        {props.children}
-                    </Container>
-                </main>
+                <div id="back-to-top-anchor" className={classes.appBarSpacer} />
+                <Container {...props.container && props.container} maxWidth="xl" className={classes.container}>
+                    {props.children}
+                </Container>
+                <ScrollTop {...props} ref={ref}>
+                    <Fab color="secondary" size="small" aria-label="scroll back to top">
+                        <KeyboardArrowUpIcon />
+                    </Fab>
+                </ScrollTop>
             </div>
         </ThemeProvider>
     );

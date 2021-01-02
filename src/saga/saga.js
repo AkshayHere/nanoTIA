@@ -1,3 +1,5 @@
+import { push } from 'connected-react-router';
+import { isEmpty } from 'lodash';
 import { select, take, takeLatest, takeEvery, call, put, spawn, delay, all } from 'redux-saga/effects';
 
 import {
@@ -8,30 +10,46 @@ import {
 	SAVE_POSTS,
 	SET_PAGE_NO,
 	SAVE_POST_DETAILS,
+	API_ERROR_RESPONSE
 } from 'redux/constants';
 
 import requests from './requests';
 
 export function* getPosts() {
-	yield takeLatest(GET_POSTS, function* fetchRecords() {
+	yield takeLatest(GET_POSTS, function* fetchRecords(payload) {
 		let posts = [];
-		let pageNo = '';
+
+		let { pageNo, limit } = payload.payload;
+		console.log('pageNo', pageNo);
+		console.log('limit', limit);
 
 		try {
 			window.store.dispatch({ type: SHOW_LOADER, payload: {} });
-			const response = yield call(requests.getPosts);
-			posts = response.data.posts;
-			pageNo = response.data.current_page;
+			const response = yield call(requests.getPosts, pageNo, limit);
+			if ('data' in response && response.data) {
+				posts = response.data.posts;
+				pageNo = response.data.current_page;
 
-			window.store.dispatch({ type: HIDE_LOADER, payload: {} });
+				window.store.dispatch({ type: HIDE_LOADER, payload: {} });
 
-			// save posts
-			yield put({ type: SAVE_POSTS, payload: posts });
+				console.log('posts', posts);
 
-			// save page no
-			yield put({ type: SET_PAGE_NO, payload: pageNo });
+				// save posts
+				yield put({ type: SAVE_POSTS, payload: posts });
+
+				// save page no
+				yield put({ type: SET_PAGE_NO, payload: pageNo });
+			}
+			else {
+				// window.location.href = '/error';
+				window.store.dispatch(push('/error'));
+				return;
+			}
 		} catch (error) {
 			console.warn('error : ', error);
+			yield put({ type: API_ERROR_RESPONSE, payload: error });
+			// window.location.href = '/error';
+			window.store.dispatch(push('/error'));
 			return;
 		}
 	});
@@ -42,21 +60,29 @@ export function* getPostDetails() {
 		let currentPost = {};
 
 		let { slug } = payload.payload;
-		console.log('slug',slug);
+		console.log('slug', slug);
 
 		try {
 			window.store.dispatch({ type: SHOW_LOADER, payload: {} });
 
 			const response = yield call(requests.getPostDetails, slug);
-			currentPost = response.data.posts.shift();
-
-			window.store.dispatch({ type: HIDE_LOADER, payload: {} });
-
-			// save posts
-			yield put({ type: SAVE_POST_DETAILS, payload: currentPost });
-
+			if ('data' in response && response.data) {
+				window.store.dispatch({ type: HIDE_LOADER, payload: {} });
+				currentPost = response.data.posts.shift();
+				// save posts
+				yield put({ type: SAVE_POST_DETAILS, payload: currentPost });
+			}
+			else {
+				// window.location.href = '/error';
+				window.store.dispatch(push('/error'));
+				return;
+			}
 		} catch (error) {
-			console.warn('error : ', error);
+			let errorData = error.response;
+			console.log('errorData', errorData);
+			window.store.dispatch({ type: API_ERROR_RESPONSE, payload: errorData });
+			// window.location.href = '/error';
+			window.store.dispatch(push('/error'));
 			return;
 		}
 	});
