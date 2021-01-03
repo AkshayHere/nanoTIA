@@ -4,6 +4,10 @@
 
 Its a simple mini website which took motivation from [Tech in Asia](https://www.techinasia.com/) and build using various technologies like [ReactJS](https://reactjs.org/), [Redux](https://redux.js.org/), [Redux Saga](https://github.com/redux-saga/redux-saga), etc.
 
+Currently secured using ssh.
+
+Email your public key @ akshymohn@gmail.com so that i grant you access to this repo.
+
 ## Installation
 Clone the project in your desired folder
 
@@ -11,7 +15,7 @@ Clone the project in your desired folder
 
 Switch to the folder
 
-    cd laravel-realworld-example-app
+    cd nanoTIA
 
 Install the necessary packages
 
